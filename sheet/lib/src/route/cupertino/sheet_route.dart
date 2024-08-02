@@ -115,8 +115,8 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           draggable: draggable,
         );
 
-  /* @override */
-  /* bool set draggable => draggable; */
+  @override
+  bool set draggable => draggable;
 
   final SheetController _sheetController = SheetController();
 
