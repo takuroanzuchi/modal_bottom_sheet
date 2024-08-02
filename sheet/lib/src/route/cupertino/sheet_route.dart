@@ -101,6 +101,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
     Color? backgroundColor,
     super.maintainState = true,
     super.fit,
+    bool draggable = true,
   }) : super(
           builder: (BuildContext context) {
             return _CupertinoSheetDecorationBuilder(
@@ -111,6 +112,7 @@ class CupertinoSheetRoute<T> extends SheetRoute<T> {
           },
           animationCurve: _kCupertinoSheetCurve,
           initialExtent: initialStop,
+          draggable: draggable,
         );
 
   @override
@@ -320,6 +322,7 @@ class CupertinoSheetPage<T> extends Page<T> {
   const CupertinoSheetPage({
     required this.child,
     this.maintainState = true,
+    this.draggable = true,
     super.key,
     super.name,
     super.arguments,
@@ -331,9 +334,15 @@ class CupertinoSheetPage<T> extends Page<T> {
   /// {@macro flutter.widgets.modalRoute.maintainState}
   final bool maintainState;
 
+  /// Determines if the sheet can be dragged to close.
+  final bool draggable;
+
   @override
   Route<T> createRoute(BuildContext context) {
-    return _PageBasedCupertinoSheetRoute<T>(page: this);
+    return _PageBasedCupertinoSheetRoute<T>(
+      page: this,
+      draggable: draggable,
+    );
   }
 }
 
@@ -344,6 +353,7 @@ class CupertinoSheetPage<T> extends Page<T> {
 class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
   _PageBasedCupertinoSheetRoute({
     required CupertinoSheetPage<T> page,
+    required bool draggable,
     super.stops,
     super.initialStop,
     super.backgroundColor,
@@ -354,6 +364,7 @@ class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
             return (ModalRoute.of(context)!.settings as CupertinoSheetPage<T>)
                 .child;
           },
+          draggable: draggable,
         );
 
   CupertinoSheetPage<T> get _page => settings as CupertinoSheetPage<T>;
@@ -363,4 +374,7 @@ class _PageBasedCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
 
   @override
   String get debugLabel => '${super.debugLabel}(${_page.name})';
+
+  @override
+  bool get draggable => _page.draggable;
 }
